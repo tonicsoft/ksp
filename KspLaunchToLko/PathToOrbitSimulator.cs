@@ -53,23 +53,23 @@ namespace KspLaunchToLko
         }
 
         private delegate Vector2 Acceleration(Vector2 position, Vector2 velocity);
-        private OrbitalState computeRk4Iteration(OrbitalState currentState, double h, Acceleration acceleration)
+        private OrbitalState computeRk4Iteration(OrbitalState currentState, double h, Acceleration a)
         {
             var r0 = currentState.position;
             var v0 = currentState.velocity;
-            var a0 = acceleration(r0, v0);
+            var a0 = a(r0, v0);
 
             var k1r = v0;
             var k1v = a0;
 
             var k2r = v0 + 0.5 * h * k1v;
-            var k2v = acceleration(r0 + 0.5 * h * k1r, k2r);
+            var k2v = a(r0 + 0.5 * h * k1r, k2r);
 
             var k3r = v0 + 0.5 * h * k2v;
-            var k3v = acceleration(r0 + 0.5 * h * k2r, k3r);
+            var k3v = a(r0 + 0.5 * h * k2r, k3r);
 
             var k4r = v0 + h * k3v;
-            var k4v = acceleration(r0 + h * k3r, k4r);
+            var k4v = a(r0 + h * k3r, k4r);
 
             var r1 = r0 + (h / 6) * (k1r + 2 * k2r + 2 * k3r + k4r);
             var v1 = v0 + (h / 6) * (k1v + 2 * k2v + 2 * k3v + k4v);
