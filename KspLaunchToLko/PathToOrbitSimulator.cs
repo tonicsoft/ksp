@@ -43,24 +43,17 @@ namespace KspLaunchToLko
             {
                 result.Add(currentState);
 
-                Func<Vector2, Vector2, Vector2> acceleration = (Vector2 position, Vector2 velocity) => util.accelerationDueToGravity(position) + thrust(position, velocity);
+                Vector2 acceleration(Vector2 r, Vector2 v) => util.accelerationDueToGravity(r) + thrust(r, v);
 
                 currentState = computeRk4Iteration(currentState, timestep, acceleration);
                 currentTime += timestep;
-                
-                /*
-                if (util.specificOrbitalEnergy(nextState.position, nextState.velocity) > util.specificOrbitalEnergyOfCircularOrbit(1000000))
-                {
-                    break;
-                }
-                */
             }
 
             return result;
         }
 
-        // acceleration is a function of position and velocity, a(r, v)
-        private OrbitalState computeRk4Iteration(OrbitalState currentState, double h, Func<Vector2, Vector2, Vector2> acceleration)
+        private delegate Vector2 Acceleration(Vector2 position, Vector2 velocity);
+        private OrbitalState computeRk4Iteration(OrbitalState currentState, double h, Acceleration acceleration)
         {
             var r0 = currentState.position;
             var v0 = currentState.velocity;
