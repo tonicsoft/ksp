@@ -10,6 +10,7 @@ namespace KspLaunchToLko
     {
         public readonly double x;
         public readonly double y;
+        public static readonly Vector2 ZERO = new Vector2(0, 0);
 
         public Vector2(double x, double y)
         {

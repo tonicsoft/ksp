@@ -23,114 +23,40 @@ namespace KspLaunchToLko
     // time in reverse
     public class PathToOrbitSimulator
     {
-        private readonly double orbitalRadius;
-        private readonly double finalSpeed;
         private readonly OrbitalUtilities util;
 
-        public PathToOrbitSimulator(double orbitalRadius, OrbitalUtilities util)
+        public PathToOrbitSimulator(OrbitalUtilities util)
         {
-            this.orbitalRadius = orbitalRadius;
             this.util = util;
-            
-            finalSpeed = util.circularOrbitSpeed(orbitalRadius);
         }
 
-        public List<OrbitalState> runForwardsSimulation(Vector2 initialPosition, Vector2 initialVelocity, Func<Vector2, Vector2, Vector2> thrust)
+        public delegate Vector2 Thrust(Vector2 position, Vector2 velocity);
+        public delegate bool ContinueSimulation(double time, OrbitalState orbitalState);
+
+        public List<OrbitalState> runSimulation(Vector2 initialPosition, Vector2 initialVelocity, Thrust thrust, double timestep, ContinueSimulation cont)
         {
+            var currentTime = 0.0;
             OrbitalState currentState = new OrbitalState(initialPosition, initialVelocity);
             List<OrbitalState> result = new List<OrbitalState>();
             
-            for (int i = 0; i < 3000; i++)
+            while (cont(currentTime, currentState))
             {
+                result.Add(currentState);
+
                 Func<Vector2, Vector2, Vector2> acceleration = (Vector2 position, Vector2 velocity) => util.accelerationDueToGravity(position) + thrust(position, velocity);
 
-                var nextState = computeRk4Iteration(currentState, 1, acceleration);
+                currentState = computeRk4Iteration(currentState, timestep, acceleration);
+                currentTime += timestep;
                 
+                /*
                 if (util.specificOrbitalEnergy(nextState.position, nextState.velocity) > util.specificOrbitalEnergyOfCircularOrbit(1000000))
                 {
                     break;
                 }
-
-                currentState = nextState;
-                result.Add(nextState);
-            }
-
-            return result;
-        }
-
-        public List<OrbitalState> runBackwardsSimulation(Func<Vector2, Vector2, Vector2> thrust)
-        {
-            Vector2 finalPosition = new Vector2(orbitalRadius, 0);
-            Vector2 finalVelocity = new Vector2(0, -finalSpeed);
-
-            OrbitalState currentState = new OrbitalState(finalPosition, finalVelocity);
-            List<OrbitalState> result = new List<OrbitalState>();
-            // due to numerical issues r may increase in the first steps of the sim
-            bool rShouldBeDecreasing = false;
-            bool aShouldBeDecreasing = false;
-
-            for (int i = 0; i < 3000; i++)
-            {
-                Func<Vector2, Vector2, Vector2> acceleration = (Vector2 position, Vector2 velocity) => util.accelerationDueToGravity(position) + thrust(position, velocity);
-
-                var previousState = computeRk4Iteration(currentState, -1, acceleration);
-                /*
-                // heuristic to prevent the rocket turning around
-                if (accelerationDueToThrust.magnitude() > 2 * currentState.velocity.magnitude())
-                {
-                    break;
-                }
                 */
-                // heuristic to stop when the orbit becomes highly eccentric
-                if (util.eccentricity(currentState.position, currentState.velocity) > 0.999)
-                {
-                    break;
-                }
-                // heuristic to stop when we reach periapsis
-                if (currentState.position.magnitude() > previousState.position.magnitude())
-                {
-                    rShouldBeDecreasing = true;
-                } else // r is now increasing
-                {
-                    if (rShouldBeDecreasing)
-                    {
-                        break;
-                    }
-                }
-                // heuristic to stop when semi major axis gets silly
-                if (util.semiMajorAxis(currentState.position, currentState.velocity) >
-                    util.semiMajorAxis(previousState.position, previousState.velocity))
-                {
-                    aShouldBeDecreasing = true;
-                }
-                else
-                {
-                    if (aShouldBeDecreasing)
-                    {
-                        break;
-                    }
-                }
-                
-                currentState = previousState;
-                result.Add(previousState);
             }
 
             return result;
-        }
-
-        public static Vector2 computeThrust(OrbitalState currentState)
-        {
-            // constant thrust in the direction of motion
-            return currentState.velocity.unit() * 30;
-        }
-
-        private OrbitalState computeSimpleEulerIteration(OrbitalState currentState, double timeStep, Func<Vector2, Vector2> acceleration)
-        {
-            Vector2 nextPosition = currentState.position + currentState.velocity * timeStep + 0.5 * acceleration(currentState.position) * timeStep * timeStep;
-
-            Vector2 nextVelocity = currentState.velocity + acceleration(currentState.position) * timeStep;
-
-            return new OrbitalState(nextPosition, nextVelocity);
         }
 
         // acceleration is a function of position and velocity, a(r, v)

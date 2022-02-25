@@ -19,6 +19,7 @@ namespace KspLaunchToLko
             μ = G * M;
         }
 
+        public double specificOrbitalEnergy(OrbitalState state) => specificOrbitalEnergy(state.position, state.velocity);
         public double specificOrbitalEnergy(Vector2 position, Vector2 velocity)
         {
             double kineticEnergy = 0.5 * velocity.squareMagnitude();
@@ -49,8 +50,10 @@ namespace KspLaunchToLko
             return (velocity.squareMagnitude() / μ - 1/position.magnitude()) * position - (position.dot(velocity)/μ) * velocity;
         }
 
+        public double eccentricity(OrbitalState state) => eccentricity(state.position, state.velocity);
         public double eccentricity(Vector2 position, Vector2 velocity) => eccentricityVector(position, velocity).magnitude();
 
+        public double semiMajorAxis(OrbitalState state) => semiMajorAxis(state.position, state.velocity);
         public double semiMajorAxis(Vector2 position, Vector2 velocity)
         {
             return -μ / (2 * specificOrbitalEnergy(position, velocity));

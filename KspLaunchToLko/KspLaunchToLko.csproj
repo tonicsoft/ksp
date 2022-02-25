@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
+    <Compile Include="Globals.cs" />
     <Compile Include="OrbitalUtilities.cs" />
     <Compile Include="PathToOrbitSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
