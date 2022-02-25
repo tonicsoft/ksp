@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32210.238
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KspLaunchToLko", "KspLaunchToLko\KspLaunchToLko.csproj", "{ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{3FA6F616-BC8B-491C-B4CE-7D3E8D6D0ED2}"
+	ProjectSection(ProjectDependencies) = postProject
+		{ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90} = {ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Python", "Python", "{FC33536F-5DAA-430F-9233-2AD44BAF5ED9}"
+	ProjectSection(SolutionItems) = preProject
+		plot.py = plot.py
+		position-plot.py = position-plot.py
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABA4FDDF-51A4-4EAB-815F-A5A17C6B5D90}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FA6F616-BC8B-491C-B4CE-7D3E8D6D0ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FA6F616-BC8B-491C-B4CE-7D3E8D6D0ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FA6F616-BC8B-491C-B4CE-7D3E8D6D0ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FA6F616-BC8B-491C-B4CE-7D3E8D6D0ED2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {60016D9E-A943-4209-87BF-75CEA49ACAA9}
+	EndGlobalSection
+EndGlobal
