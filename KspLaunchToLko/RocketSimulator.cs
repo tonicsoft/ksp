@@ -18,13 +18,6 @@ namespace KspLaunchToLko
         }
     }
 
-    public interface ISimulationTerminator
-    {
-        bool continueSimulation(double time, OrbitalState state);
-
-
-    }
-
     // Creates a numerical simulation of a possible rocket trajectory. The rocket acceleration can be specified as
     // a function of current position and velocity.
     public class RocketSimulator
