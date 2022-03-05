@@ -18,20 +18,33 @@ namespace KspLaunchToLko
         }
     }
 
-    // Creates a numerical simulation of a possible rocket trajectory that ends in a circular orbit. 
-    // It does so by starting with the equations of motion of an object in circular orbit and simulating
-    // time in reverse
-    public class PathToOrbitSimulator
+    public interface ISimulationTerminator
+    {
+        bool continueSimulation(double time, OrbitalState state);
+
+
+    }
+
+    // Creates a numerical simulation of a possible rocket trajectory. The rocket acceleration can be specified as
+    // a function of current position and velocity.
+    public class RocketSimulator
     {
         private readonly OrbitalUtilities util;
 
-        public PathToOrbitSimulator(OrbitalUtilities util)
+        public RocketSimulator(OrbitalUtilities util)
         {
             this.util = util;
         }
 
         public delegate Vector2 Thrust(Vector2 position, Vector2 velocity);
         public delegate bool ContinueSimulation(double time, OrbitalState orbitalState);
+
+        public OrbitalState simulateTimeStep(OrbitalState initialState, Thrust thrust, double timestep)
+        {
+            Vector2 acceleration(Vector2 r, Vector2 v) => util.accelerationDueToGravity(r) + thrust(r, v);
+
+            return computeRk4Iteration(initialState, timestep, acceleration);
+        }
 
         public List<OrbitalState> runSimulation(Vector2 initialPosition, Vector2 initialVelocity, Thrust thrust, double timestep, ContinueSimulation cont)
         {
@@ -43,9 +56,8 @@ namespace KspLaunchToLko
             {
                 result.Add(currentState);
 
-                Vector2 acceleration(Vector2 r, Vector2 v) => util.accelerationDueToGravity(r) + thrust(r, v);
+                currentState = simulateTimeStep(currentState, thrust, timestep);
 
-                currentState = computeRk4Iteration(currentState, timestep, acceleration);
                 currentTime += timestep;
             }
 

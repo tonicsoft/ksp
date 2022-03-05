@@ -24,7 +24,7 @@ namespace Tests
 
             var initialVelocity = new Vector2(-util.circularOrbitSpeed(radius), 0);
 
-            var sim = new PathToOrbitSimulator(util);
+            var sim = new RocketSimulator(util);
 
             var result = sim.runSimulation(initialPosition, initialVelocity, (p, v) => Vector2.ZERO, 1, (time, state) => time < 3000);
 
@@ -62,7 +62,7 @@ namespace Tests
             var finalPosition = new Vector2(targetOrbitalRadius, 0);
             var finalVelocity = new Vector2(0, -util.circularOrbitSpeed(targetOrbitalRadius));
 
-            var sim = new PathToOrbitSimulator(util);
+            var sim = new RocketSimulator(util);
 
             using (var writer = new StreamWriter("plot.txt"))
             {

@@ -62,8 +62,9 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="OrbitalUtilities.cs" />
-    <Compile Include="PathToOrbitSimulator.cs" />
+    <Compile Include="RocketSimulator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ToOrbitFlightController.cs" />
     <Compile Include="Vector2.cs" />
   </ItemGroup>
   <ItemGroup>

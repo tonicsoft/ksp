@@ -10,6 +10,7 @@ namespace KspLaunchToLko
     [KSPAddon(KSPAddon.Startup.Flight, false)]
     public class Class1 : MonoBehaviour 
     {
+        private ToOrbitFlightController mod = null;
         public void Update()
         {
             bool turnModOn = Input.GetKey(KeyCode.LeftAlt) && Input.GetKeyDown(KeyCode.Alpha1);
@@ -20,16 +21,13 @@ namespace KspLaunchToLko
 
             if (turnModOn)
             {
-                FlightGlobals.ActiveVessel.OnFlyByWire += FlightController;
-            } else if (turnModOff)
+                mod = new ToOrbitFlightController(80000);
+                FlightGlobals.ActiveVessel.OnFlyByWire += mod.onFlyByWire;
+            } else if (turnModOff && mod != null)
             {
-                FlightGlobals.ActiveVessel.OnFlyByWire -= FlightController;
+                FlightGlobals.ActiveVessel.OnFlyByWire -= mod.onFlyByWire;
+                mod = null;
             }
-        }
-
-        public void FlightController(FlightCtrlState s)
-        {
-            s.mainThrottle = 1;
         }
 
     }
