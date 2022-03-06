@@ -58,5 +58,41 @@ namespace KspLaunchToLko
         {
             return -μ / (2 * specificOrbitalEnergy(position, velocity));
         }
+
+        public double semiLatusRectum(OrbitalState state)
+        {
+            return semiMajorAxis(state) * (1 - Math.Pow(eccentricity(state), 2));
+        }
+
+        public double specificRelativeAngularMomentum(OrbitalState state)
+        {
+            return Math.Sqrt(semiLatusRectum(state) * μ);
+        }
+
+        // positive regardless of whether the angle is above or below the horizon
+        public double flightPathAngle(OrbitalState state)
+        {
+            var h = specificRelativeAngularMomentum(state);
+            var r = state.position.magnitude();
+            var v = state.velocity.magnitude();
+            return Math.Acos(h / (r * v));
+        }
+
+        // 0 at perapsis, pi at apoapsis
+        public double trueAnomaly(OrbitalState state)
+        {
+            var e = eccentricityVector(state.position, state.velocity);
+            var r = state.position;
+
+            var ν = Math.Acos(e.dot(r) / (e.magnitude() * r.magnitude()));
+
+            if (r.dot(state.velocity) < 0)
+            {
+                return 2 * Math.PI - ν;
+            } else
+            {
+                return ν;
+            }
+        }
     }
 }
